@@ -1,20 +1,55 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <input v-model="input_words" placeholder="enter the words"/>
+    {{ input_words }}
+    <!-- <textarea :value="input" @input="update"></textarea> -->
+    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import Vue from 'vue';
 import HelloWorld from './components/HelloWorld.vue'
+import {AllInputWords, SetInputWords} from './main'
 
-@Component({
-  components: {
+export default Vue.extend({
+  name: 'app',
+  components:{
     HelloWorld
+  },
+  computed: {
+    input_words: {
+      get() : string {
+        return AllInputWords(this.$store)
+      },
+      set(value: string) {
+        SetInputWords(this.$store, value);
+      }
+    }
+  },
+  // props: {
+  //   input_words: {
+  //     type: String,
+  //     default: undefined
+  //   }
+  // },
+  // data() {
+  //   return {
+  //     input: "",
+  //     message : "Hello",
+  //     word_input: ""
+  //   }
+  // },
+  methods: {
+
+  },
+  mounted() {
+    const a = this.$data;
+    
+    //this.$$
   }
-})
-export default class App extends Vue {}
+});
 </script>
 
 <style>
