@@ -2,7 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import { getStoreAccessors } from 'vuex-typescript';
 import * as Vuex from 'vuex';
+import VueRouter from 'vue-router'
+import TestComponent from './components/TestComponent.vue'
 
+Vue.use(VueRouter)
 Vue.use(Vuex);
 
 Vue.config.productionTip = false
@@ -56,7 +59,21 @@ export const store = new Vuex.Store<RootState>({
   }
 })
 
+
+
+
+
+const routes = [
+  { path: 'test', component: TestComponent }
+]
+
+const router = new VueRouter({
+  routes // short for `routes: routes`
+})
+
+
 new Vue({
+  router,
   store,
   render: h => h(App)
 }).$mount('#app')

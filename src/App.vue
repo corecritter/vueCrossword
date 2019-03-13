@@ -3,6 +3,7 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <input v-model="input_words" placeholder="enter the words"/>
     {{ input_words }}
+    <button v-on:click="generate_click">Generate!</button>
     <!-- <textarea :value="input" @input="update"></textarea> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
   </div>
@@ -42,7 +43,9 @@ export default Vue.extend({
   //   }
   // },
   methods: {
-
+    generate_click: function(event: Event) {
+      this.$router.push({ path: "test" });
+    }
   },
   mounted() {
     const a = this.$data;
