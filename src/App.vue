@@ -1,9 +1,7 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <input v-model="input_words" placeholder="enter the words"/>
-    {{ input_words }}
-    <button v-on:click="generate_click">Generate!</button>
+    <router-view>
+    </router-view>
     <!-- <textarea :value="input" @input="update"></textarea> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
   </div>
