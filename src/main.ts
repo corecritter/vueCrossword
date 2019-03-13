@@ -3,8 +3,8 @@ import App from './App.vue'
 import { getStoreAccessors } from 'vuex-typescript'
 import * as Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import WordInputComponent from './components/WordInputComponent.vue'
 import TestComponent from './components/TestComponent.vue'
-import HelloWorld from './components/HelloWorld.vue'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -61,8 +61,8 @@ export const store = new Vuex.Store<RootState>({
 })
 
 const routes = [
-  { path: '/test', component: TestComponent },
-  { path: '/', component: HelloWorld }
+  { path: '/', component: WordInputComponent },
+  { path: '/test', component: TestComponent }
 ]
 
 const router = new VueRouter({
