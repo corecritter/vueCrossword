@@ -1,24 +1,73 @@
 {
-    "version": "0.2.0",
-    "configurations": [
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
       {
-        "type": "chrome",
-        "request": "launch",
-        "name": "vuejs: chrome",
-        "url": "http://localhost:8080",
-        "webRoot": "${workspaceFolder}/src",
-        "breakOnLoad": true,
-        "sourceMapPathOverrides": {
-          "webpack:///./src/*": "${webRoot}/*"
-        }
+          "type": "node",
+          "request": "launch",
+          "name": "Launch Program",
+          "envFile": "${workspaceRoot}/DEBUG.env",
+          "runtimeArgs": [
+              "--nolazy",
+              "-r",
+              "ts-node/register"
+          ],
+          "args": [
+              "${workspaceRoot}/source/index.ts"
+          ],
+          "cwd": "${workspaceRoot}",
+          "protocol": "inspector",
       },
       {
-        "type": "firefox",
-        "request": "launch",
-        "name": "vuejs: firefox",
-        "url": "http://localhost:8080",
-        "webRoot": "${workspaceFolder}/src",
-        "pathMappings": [{ "url": "webpack:///src/", "path": "${webRoot}/" }]
+          "type": "node",
+          "request": "launch",
+          "name": "Run File (js)",
+          "envFile": "${workspaceRoot}/DEBUG.env",
+          "args": [
+              "${relativeFile}"
+          ],
+          "cwd": "${workspaceRoot}",
+      },
+      {
+          // Use IntelliSense to learn about possible attributes.
+          // Hover to view descriptions of existing attributes.
+          // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+          "type": "node",
+          "request": "launch",
+          "name": "Run File",
+          "runtimeArgs": [
+              "-r",
+              "ts-node/register"
+          ],
+          "args": [
+            "${workspaceFolder}/utils/puzzle-solve-tester.ts"
+          ],
+          "cwd": "${workspaceRoot}",
+          "protocol": "inspector",
+      },
+      {
+          // Use IntelliSense to learn about possible attributes.
+          // Hover to view descriptions of existing attributes.
+          // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+          "type":"node",
+          "request": "launch",
+          "name": "Run Test File",
+          "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+          "envFile": "${workspaceRoot}/DEBUG.env",
+          "runtimeArgs": [
+              "--nolazy"
+          ],
+          "args": [
+              "--require",
+              "ts-node/register",
+              "--no-timeout",
+              "--colors",
+              "${relativeFile}"
+          ],
+          "cwd": "${workspaceRoot}",
+          "protocol": "inspector"
       }
-    ]
-  }
+  ]
+}
