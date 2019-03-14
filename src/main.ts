@@ -6,13 +6,15 @@ import VueRouter from 'vue-router'
 import WordInputComponent from './components/WordInputComponent.vue'
 import TestComponent from './components/TestComponent.vue'
 import CrosswordViewComponent from './components/CrosswordViewComponent.vue'
+import { Word } from './logic/crossword'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
 Vue.config.productionTip = false
 interface InputState {
-  InputWords?: string
+  InputWords?: string,
+  ParsedInputWords?: Array<Word>
 }
 
 interface RootState {
@@ -24,17 +26,24 @@ type DataContext = Vuex.ActionContext<InputState, RootState>;
 const data = {
   namespaced: true,
   state: {
-    InputWords: 't1, t2'
+    InputWords: 't1, t2',
+    ParsedInputWords : []
   },
   getters: {
     GetInputWords (state: InputState) : string {
       return state.InputWords as string
+    },
+    GetParsedInputWords (state: InputState) : Array<Word> {
+      return state.ParsedInputWords
     }
   },
   mutations: {
     setInputWords (state: InputState, newValue: string) {
       console.log('setWordsAction triggered with', newValue)
       state.InputWords = newValue
+    },
+    setParsedInputWords(state: InputState, newValue: Array<Word>) {
+      state.ParsedInputWords = newValue
     }
   },
   actions: {
@@ -49,8 +58,10 @@ const { commit, read, dispatch } = getStoreAccessors('InputModule')
 const getters = data.getters
 
 export const AllInputWords = read(getters.GetInputWords)
+export const AllParsedWords = read(getters.GetParsedInputWords)
 
 export const SetInputWords = commit(data.mutations.setInputWords)
+export const SetParsedInputWords = commit(data.mutations.setParsedInputWords)
 
 export const store = new Vuex.Store<RootState>({
   state: {
