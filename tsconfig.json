@@ -16,7 +16,8 @@
     ],
     "paths": {
       "@/*": [
-        "src/*"
+        "src/*",
+        "src/typings.d.ts"
       ]
     },
     "lib": [
