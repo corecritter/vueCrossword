@@ -22,7 +22,8 @@
 import Vue from 'vue'
 import VueJsonPretty from 'vue-json-pretty'
 import TestComponent from './TestComponent.vue'
-import { AllInputWords, SetInputWords } from '../main'
+import { AllInputWords, SetInputWords, SetParsedInputWords } from '../main'
+import { Word } from '../logic/crossword'
 
 export default Vue.extend({
   components: {
@@ -53,14 +54,18 @@ export default Vue.extend({
   methods: {
     generate_click: function (event: Event) {
       try {
-        // var jString= JSON.stringify(this.jsonDemoString)
-        // var jsonObject = JSON.parse(jString)
-        var jsonObject = JSON.parse(this.input_words)
+        var jString= JSON.stringify(this.jsonDemoString)
+        var jsonObject = JSON.parse(jString)
+        //var jsonObject = JSON.parse(this.input_words)
+        var parsedWords = new Array() as Array<Word>
         for (let i = 0; i < jsonObject.length; i++) {
           var current = jsonObject[i]
-          var name = current.word
           var hint = current.hint
+          var word = {} as Word
+          word.value = current.word
+          parsedWords.push(word)
         }
+        SetParsedInputWords(this.$store, parsedWords)
         this.$router.push({ path: 'test' })
       }
       catch {
