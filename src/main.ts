@@ -5,6 +5,7 @@ import * as Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import WordInputComponent from './components/WordInputComponent.vue'
 import TestComponent from './components/TestComponent.vue'
+import CrosswordViewComponent from './components/CrosswordViewComponent.vue'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -62,6 +63,7 @@ export const store = new Vuex.Store<RootState>({
 
 const routes = [
   { path: '/', component: WordInputComponent },
+  { path: '/view', component: CrosswordViewComponent },
   { path: '/test', component: TestComponent }
 ]
 

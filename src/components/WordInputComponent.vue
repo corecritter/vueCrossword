@@ -21,7 +21,6 @@ import TestComponent from './TestComponent.vue'
 import { AllInputWords, SetInputWords } from '../main'
 
 export default Vue.extend({
-  name: 'app',
   components: {
     TestComponent,
     VueJsonPretty
@@ -29,8 +28,8 @@ export default Vue.extend({
   data () {
     return {
       jsonDemoString: [
-          {word:'Working', hint:'You are probably not doing this right now'},
-          {word:'Daydream', hint:'You are probably doing this right now'}
+          { word: 'Working', hint: 'You are probably not doing this right now' },
+          { word: 'Daydream', hint: 'You are probably doing this right now' }
       ]
     }
   },
@@ -59,7 +58,7 @@ export default Vue.extend({
 .root {
   margin: auto;
   width: 60%;
-  border: 1px solid #73AD21;
+  border: 1px solid rgb(5, 179, 34);
   padding: 10px;
 }
 .json-pretty {
