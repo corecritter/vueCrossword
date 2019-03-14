@@ -11,6 +11,10 @@
     <input v-model="input_words" placeholder="enter the words"/>
     <br>
     <button v-on:click="generate_click">Generate!</button>
+    <br>
+    <div v-show="has_error" class="error-message">
+      {{ error_message }}
+    </div>
   </div>
 </template>
 
@@ -30,7 +34,10 @@ export default Vue.extend({
       jsonDemoString: [
           { word: 'Working', hint: 'You are probably not doing this right now' },
           { word: 'Daydream', hint: 'You are probably doing this right now' }
-      ]
+      ],
+      json_error: false,
+      has_error: false,
+      error_message: ""
     }
   },
   computed: {
@@ -45,8 +52,22 @@ export default Vue.extend({
   },
   methods: {
     generate_click: function (event: Event) {
-      this.$router.push({ path: 'test' })
-    }
+      try {
+        // var jString= JSON.stringify(this.jsonDemoString)
+        // var jsonObject = JSON.parse(jString)
+        var jsonObject = JSON.parse(this.input_words)
+        for (let i = 0; i < jsonObject.length; i++) {
+          var current = jsonObject[i]
+          var name = current.word
+          var hint = current.hint
+        }
+        this.$router.push({ path: 'test' })
+      }
+      catch {
+        this.has_error = true
+        this.error_message = "Invalid JSON was entered. Go on now, fix it and give it another go!"
+      }
+    },      
   },
   mounted () {
   }
@@ -63,6 +84,10 @@ export default Vue.extend({
 }
 .json-pretty {
   text-align: left;
+}
+.error-message {
+  padding: 10px;
+  color: red
 }
 h3 {
   margin: 40px 0 0;

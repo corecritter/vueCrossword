@@ -8,7 +8,7 @@ import CrosswordCellcomponent from './CrosswordCellcomponent.vue'
 
 export default Vue.extend({
     components: {
-        CrosswordCellcomponent
+        //CrosswordCellcomponent
     }
 })
 </script>

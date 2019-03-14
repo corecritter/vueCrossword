@@ -8,7 +8,7 @@ import HintCellComponent from './crossword/HintCellComponent.vue'
 
 export default Vue.extend({
     components: {
-        HintCellComponent
+        //HintCellComponent
     }
 })
 </script>
