@@ -1,30 +1,52 @@
 import { Word, Board, Cell } from './crossword';
 
-export function generate(inputs: ReadonlyArray<string>): { words: Array<Word>, wasSuccessful: boolean} {
-    let words: Readonly<Word>[] = [{
-        direction: "h",
-        value: inputs[0],
-        startX: 0,
-        startY: 0
-    }];
+export function generate(inputs: ReadonlyArray<string>): { words: Array<Word>, success: boolean} {
+    const words = inputs.concat([]);
+    return tryPlaceWords([], words);
+}
 
-    const remainingWords = inputs.concat([]);
-    while(remainingWords.length > 0) {
-        for (let i = 1; i < inputs.length; i++) {
-            let results = placeWord(words, inputs[i]);
-            if (results) {
-                words = results.words;
-                break;
+function tryPlaceWords(placed: Readonly<Word>[], notPlaced: ReadonlyArray<string>): { words: Readonly<Word>[], success: boolean} {
+    if (placed.length === 0) {
+        const remainingWords = notPlaced.slice(1);
+
+        let firstWordH: Readonly<Word> = {
+            direction: "h",
+            value: notPlaced[0],
+            startX: 0,
+            startY: 0
+        };
+    
+        const firstPlaceH = tryPlaceWords([firstWordH], remainingWords);
+        if (firstPlaceH.success) {
+            return firstPlaceH;
+        }
+
+        let firstWordV: Readonly<Word> = {
+            direction: "v",
+            value: notPlaced[0],
+            startX: 0,
+            startY: 0
+        };
+        return tryPlaceWords([firstWordV], remainingWords);
+    }
+    if (notPlaced.length === 0) {
+        return { words: placed, success: true};
+    }
+    for (let i = 0; i < notPlaced.length; i++) {
+        const placeResults = placeWord(placed, notPlaced[i]);
+        if (placeResults.success) {
+            const cloned = notPlaced.concat([]);
+            const removedWord = cloned.splice(i, 1);
+            const nextPlaceResult = tryPlaceWords(placeResults.words, cloned);
+            if (nextPlaceResult.success) {
+                return nextPlaceResult;
             }
         }
     }
-
-    return {words: [], wasSuccessful: false};
+    return { words: [], success: false};
 }
 
-function placeWord(placed: ReadonlyArray<Readonly<Word>>, nextWord: string): { words: Array<Word>, wasSuccessful: boolean} {
-    const items = placed.map(x => { value: x.value; startX: x.startX; startY: x.startY; direction: x.direction });
-    
+export function placeWord(placed: ReadonlyArray<Readonly<Word>>, nextWord: string): { words: Array<Word>, success: boolean} {   
     const letters: Map<String, {x: number, y: number}[]> = new Map<String, {x: number, y: number}[]>();
     for (let i = 0; i < placed.length; i++) {
         const word = placed[i];
@@ -38,8 +60,8 @@ function placeWord(placed: ReadonlyArray<Readonly<Word>>, nextWord: string): { w
 
                 let doesExist = false;
                 for (let k = 0; k < positions.length; k++) {
-                    if ((positions[k].x !== word.startX + k) &&
-                        (positions[k].y !== word.startY)) {
+                    if ((positions[k].x === word.startX + j) &&
+                        (positions[k].y === word.startY)) {
                         doesExist = true;
                         break;
                     }
@@ -57,12 +79,18 @@ function placeWord(placed: ReadonlyArray<Readonly<Word>>, nextWord: string): { w
                     positions = []
                 }
 
+                let doesExist = false;
                 for (let k = 0; k < positions.length; k++) {
-                    if ((positions[k].x !== word.startX) &&
-                        (positions[k].y !== word.startY + k)) {
-                        positions.push({x: word.startX,  y: word.startY + k});
+                    if ((positions[k].x === word.startX) &&
+                        (positions[k].y === word.startY + j)) {
+                        doesExist = true;
+                        break;
                     }
                 }
+                if (!doesExist) {
+                    positions.push({x: word.startX,  y: word.startY + j});
+                }
+                letters.set(letter, positions);
             }
         }
         
@@ -74,32 +102,32 @@ function placeWord(placed: ReadonlyArray<Readonly<Word>>, nextWord: string): { w
             continue;
         }
 
-        for (let j = 0; j < nextWord.length; j++) {
+        for (let j = 0; j < letterPositions.length; j++) {
             const testWordH: Word = {
                 direction: "h",
                 value: nextWord,
-                startX: letterPositions[j].x - j,
+                startX: letterPositions[j].x - i,
                 startY: letterPositions[j].y
             }
             const placedNextH = placed.concat([testWordH]);
             if (testWords(placedNextH)) {
-                return {words: placedNextH, wasSuccessful: true};
+                return {words: placedNextH, success: true};
             }
 
             const testWordV: Word = {
                 direction: "v",
                 value: nextWord,
                 startX: letterPositions[j].x,
-                startY: letterPositions[j].y - j
+                startY: letterPositions[j].y - i
             }
             const placedNextV = placed.concat([testWordV]);
             if (testWords(placedNextV)) {
-                return {words: placedNextH, wasSuccessful: true};
+                return {words: placedNextV, success: true};
             }
         }
     }
 
-    return { words: [], wasSuccessful: false };
+    return { words: [], success: false };
 }
 
 export function makeBoard(input: ReadonlyArray<Readonly<Word>>): Board {
