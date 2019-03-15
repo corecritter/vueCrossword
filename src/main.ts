@@ -26,7 +26,7 @@ type DataContext = Vuex.ActionContext<InputState, RootState>;
 const data = {
   namespaced: true,
   state: {
-    InputWords: 't1, t2',
+    InputWords: '[{"word":"green","hint":""},{"word":"leprechaun","hint":""},{"word":"clover","hint":""},{"word":"lucky","hint":""},{"word":"cabbage","hint":""},{"word":"potofgold","hint":""},{"word":"magic","hint":""},{"word":"celtic","hint":""},{"word":"guiness","hint":""},{"word":"dublin","hint":""},{"word":"scotland","hint":""},{"word":"irishcream","hint":""},{"word":"shepardspie","hint":""}]',
     ParsedInputWords : []
   },
   getters: {

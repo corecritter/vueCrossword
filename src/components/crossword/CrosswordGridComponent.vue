@@ -51,6 +51,7 @@ export default Vue.extend({
                 var cellValue = board.GetCell(j, i)
 
                 if(cellValue) {
+
                     cellValue = cellValue.toUpperCase()
                 }
 
