@@ -1,7 +1,8 @@
 import { generate, testHitWord, testWordsIntersect, testWords, makeBoard, placeWord } from "../src/logic/generate";
 import { Word, Cell, Board } from '@/logic/crossword';
 
-const answers = [ "cow", "chickens", "hogs" ];
+//const answers = [ "cow", "chickens", "pigs" ];
+const answers = shuffle([ "cow", "chickens", "donkeys", "horses", "frogs", "pigs", "cats", "dogs", "tractor", "plow" ]);
 
 
 
@@ -29,12 +30,20 @@ if (t_placeWord()) {
     console.error("placeWords ... fail");
 }
 
-const generateResults = generate(answers);
-if (generateResults.success) {
-    printBoard(makeBoard(generateResults.words));
-} else {
-    console.error("Could not make board");
+let count = 0;
+const start = new Date();
+while(count < 1000) {
+    const answers = shuffle([ "cow", "chickens", "donkeys", "horses", "frogs", "pigs", "cats", "dogs", "tractor", "plow" ]);
+    const generateResults = generate(answers);
+    if (generateResults.success) {
+    //    printBoard(makeBoard(generateResults.words));
+    } else {
+        console.error("Could not make board");
+    }
+    count++;
 }
+const end = new Date();
+console.info('Execution time: %dms', end.valueOf() - start.valueOf())
 
 
 /// Test functions
@@ -103,6 +112,79 @@ function t_testWords(): boolean {
         return false;
     }
 
+    const w6: Word = {
+        value: "cow",
+        direction: "v",
+        startX: 0,
+        startY: 0
+    };
+    const w7: Word = {
+        value: "crow",
+        direction: "v",
+        startX: 1,
+        startY: -1
+    };
+    const w8: Word = {
+        value: "food",
+        direction: "h",
+        startX: -1,
+        startY: 1
+    };
+    //printBoard(makeBoard([w6, w7, w8]));
+    if (testWords([w6, w7, w8])) {
+        return false;
+    }
+
+
+
+    const w9: Word = {
+        "direction": "h",
+        "value": "cow",
+        "startX": 0,
+        "startY": 0
+      };
+      const w10: Word = {
+        "direction": "v",
+        "value": "chickens",
+        "startX": 0,
+        "startY": 0
+      };
+      const w11: Word = {
+        "direction": "h",
+        "value": "donkeys",
+        "startX": -2,
+        "startY": 6
+      };
+      const w12: Word = {
+        "direction": "v",
+        "value": "horses",
+        "startX": 4,
+        "startY": 3
+      };
+      const w13: Word = {
+        "direction": "h",
+        "value": "frogs",
+        "startX": 2,
+        "startY": 4
+      };
+      const w14: Word = {
+        "direction": "h",
+        "value": "pigs",
+        "startX": -1,
+        "startY": 2
+      };
+      const w15: Word = {
+        "direction": "h",
+        "value": "cats",
+        "startX": 1,
+        "startY": 6
+      }
+    //printBoard(makeBoard([w9, w10, w11, w12, w13, w14, w15]));
+    if (testWords([w9, w10, w11, w12, w13, w14, w15])) {
+        return false;
+    }
+
+
     return true;
 }
 
@@ -127,6 +209,30 @@ function t_testWordsIntersect(): boolean {
         startX: 7,
         startY: 0
     };
+    const w4: Word = {
+        value: "crow",
+        direction: "h",
+        startX: 8,
+        startY: 2
+    };
+    const w5: Word = {
+        value: "cow",
+        direction: "v",
+        startX: 7,
+        startY: 0
+    };
+    const w6: Word = {
+        direction: "h",
+        value: "donkeys",
+        startX: -2,
+        startY: 6
+    };
+    const w7: Word = {
+        "direction": "h",
+        "value": "cats",
+        "startX": 1,
+        "startY": 6
+    };
 
 
     if (!testWordsIntersect(w1, w2)) {
@@ -138,7 +244,15 @@ function t_testWordsIntersect(): boolean {
     if (testWordsIntersect(w1, w3)) {
         return false;
     }
-
+    if (!testWordsIntersect(w1, w4)) {
+        return false;
+    }
+    if (!testWordsIntersect(w3, w5)) {
+        return false;
+    }
+    if (!testWordsIntersect(w6, w7)) {
+        return false;
+    }
 
     return true;
 }
@@ -221,4 +335,23 @@ function printBoard(board: Board) {
 
     console.log(output);
     console.log(" ");
+}
+
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }

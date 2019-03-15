@@ -159,10 +159,14 @@ export function testWords(input: ReadonlyArray<Readonly<Word>>): boolean {
             if (i === j) {
                 continue;
             }
-
             if (testWordsIntersect(input[i], input[j])) {
+                // Words that intersect going the same direction must 
+                // overlap which is not allowed
+                if (input[i].direction === input[j].direction) {
+                    return false;
+                }
                 intersectionFound = true;
-                break;
+                //break;
             }
         }
 
@@ -171,16 +175,49 @@ export function testWords(input: ReadonlyArray<Readonly<Word>>): boolean {
         }
     }
 
-    // const cells = makeBoard(input);
-    // printBoard(cells);
-    // for (let i = 0; i < input.length; i++) {
-    //     const word = input[i];
-    //     for (let j = 0; j < input.length; j++) {
-    //         if (i === j) {
-    //             continue;
-    //         }
-    //     }
-    // }
+    // Any cell immediately perpendicular to the word must be a character of
+    // another word or be empty
+    for (let i = 0; i < input.length; i++) {
+        const testWord = input[i];
+        for (let j = 0; j < testWord.value.length; j++) {
+            let p1: {x: number, y: number}, p2: {x:number, y: number};
+            if (testWord.direction === "h") {
+                p1 = {
+                    x: testWord.startX + j,
+                    y: testWord.startY - 1
+                };
+                p2 = {
+                    x: testWord.startX + j,
+                    y: testWord.startY + 1
+                };
+            } else {
+                p1 = {
+                    x: testWord.startX - 1,
+                    y: testWord.startY + j
+                };
+                p2 = {
+                    x: testWord.startX + 1,
+                    y: testWord.startY + j
+                };
+            }
+
+            for (let k = 0; k < input.length; k++) {
+                if (j === k) {
+                    continue;
+                }
+
+                const p1TestHit = testHitWord(input[k], p1.x, p1.y);
+                if (p1TestHit.doesHit && input[k].direction === testWord.direction) {
+                    return false;
+                }
+
+                const p2TestHit = testHitWord(input[k], p2.x, p2.y);
+                if (p2TestHit.doesHit && input[k].direction === testWord.direction) {
+                    return false;
+                }
+            }
+        }
+    }
 
     return true;
 }
@@ -188,35 +225,39 @@ export function testWords(input: ReadonlyArray<Readonly<Word>>): boolean {
 export function testWordsIntersect(w1: Readonly<Word>, w2: Readonly<Word>): boolean {
     if (w1.direction === w2.direction) {
         if (w1.direction === "h") {
-            if (w1.startY === w2.startY) {
-                if (w1.startX === w2.startX) {
-                    return false;
-                }
+            if (w1.startY !== w2.startY) {
+                return false;
+            }
 
-                if (w1.startX < w2.startX) {
-                    if ((w1.value.length + w1.startX) >= w2.startX) {
-                        return false;
-                    }
-                } else {
-                    if ((w2.value.length + w2.startX >= w1.startX)) {
-                        return false;
-                    }
+            if (w1.startX === w2.startX) {
+                return true;
+            }
+
+            if (w1.startX < w2.startX) {
+                if ((w1.value.length + w1.startX) >= w2.startX) {
+                    return true;
+                }
+            } else {
+                if ((w2.value.length + w2.startX >= w1.startX)) {
+                    return true;
                 }
             }
         } else {
-            if (w1.startX === w2.startX) {
-                if (w1.startY === w2.startY) {
-                    return false;
-                }
+            if (w1.startX !== w2.startX) {
+                return false;
+            }
 
-                if (w1.startY < w2.startY) {
-                    if ((w1.value.length + w1.startY) >= w2.startY) {
-                        return false;
-                    }
-                } else {
-                    if ((w2.value.length + w2.startY >= w1.startY)) {
-                        return false;
-                    }
+            if (w1.startY === w2.startY) {
+                return true;
+            }
+
+            if (w1.startY < w2.startY) {
+                if ((w1.value.length + w1.startY) >= w2.startY) {
+                    return true;
+                }
+            } else {
+                if ((w2.value.length + w2.startY >= w1.startY)) {
+                    return true;
                 }
             }
         }
