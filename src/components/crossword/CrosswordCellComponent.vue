@@ -5,7 +5,7 @@
                 <div v-if="show_answer" class="letter-style">
                     {{cell.value}}
                 </div>
-                <div v-else class="letter-style">
+                <div v-else class="hidden-letter-style">
                     -
                 </div>
                 <div v-if="cell.cellNumber" class="number-style">
@@ -60,6 +60,16 @@ export default Vue.extend({
         flex:1;
         text-align:center;
         font-size: 30px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .hidden-letter-style {
+        flex:1;
+        color:white;
+        text-align:center;
+        font-size: 30px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
     .number-style {
         flex: .1;
@@ -89,6 +99,8 @@ export default Vue.extend({
         flex: 1;
         color: black;
         font-size: 30px;
+        padding-top: 5px;
+        padding-bottom: 5px;
     }
     .small-fill-style {
         flex: .1;

@@ -68,7 +68,7 @@ export default Vue.extend({
           word.value = current.word
           parsedWords.push(word)
         }
-        SetParsedInputWords(this.$store, parsedWords)
+        //SetParsedInputWords(this.$store, parsedWords)
         var wordList = parsedWords.map(x => x.value)
         var result = generate(wordList)
         if(result.success) {

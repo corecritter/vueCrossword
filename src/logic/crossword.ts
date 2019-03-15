@@ -2,6 +2,7 @@ export interface Cell {
     value: string | undefined;
     locationX: number;
     locationY: number;
+    cellNumber: number | undefined;
 }
 
 export class Board {
@@ -50,7 +51,7 @@ export class Board {
 
 export interface Word {
     value: string;
-    hintNumber?: number;
+    cellNumber?: number;
     startX: number;
     startY: number;
     direction: "h" | "v";

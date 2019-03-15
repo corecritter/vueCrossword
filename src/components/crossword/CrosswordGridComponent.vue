@@ -39,34 +39,41 @@ export default Vue.extend({
     mounted () {
         var parsedWords = AllParsedWords(this.$store)
         var board = makeBoard(parsedWords) as Board
-        // for (let index = 0; index < parsedWords.length; index++) {
-        //     var word = parsedWords[index]
-        //     var xFac = 1
-        //     var yFac = 0
-        //     if(word.direction == 'v') {
-        //         xFac = 0
-        //         yFac = 1
-        //     }
-        //     for (let i = 0; i < word.value.length; i++) {
-        //         var x = word.startX + (i * xFac)
-        //         var y = word.startY + (i * yFac)
-        //         var cell = board.GetCell(x, y)
-        //     }
-        // }
-
-        
         var extent = board.GetExtent()
-        var xRange = 3///extent.x[1] - extent.x[0]
-        var yRange = 1//extent.y[1] - extent.y[0]
+        var xMin = extent.x[0]
+        var xMax = extent.x[1]
+        var yMin = extent.y[0]
+        var yMax = extent.y[1]
+        
+        var cells = [] as Array<Cell>
+        for(let i = extent.y[0]; i <= extent.y[1]; i++) {
+            for(let j = extent.x[0]; j <= extent.x[1]; j++) {
+                var cellValue = board.GetCell(j, i)
 
+                if(cellValue) {
+                    cellValue = cellValue.toUpperCase()
+                }
+
+                var cell = {
+                    value: cellValue,
+                    cellNumber: undefined
+                } as Cell
+
+                cells.push(cell)
+            }
+        }
+
+        var xRange = extent.x[1] - extent.x[0] + 1
+        var yRange = extent.y[1] - extent.y[0] + 1
         this.grid_style = {
             display: 'grid',
             'grid-template-columns': 'repeat('+ xRange +', auto)',
             'grid-template-rows': 'repeat(' + yRange + ', auto)'
         }
 
-        this.board = [{value: 'n'} as Cell,{value: 'o'} as Cell, {value: undefined } as Cell,
-        {value: 'q'} as Cell,{value: undefined} as Cell, {value: 'q' } as Cell]
+        this.board = cells
+        //[{value: 'n', cellNumber:3} as Cell,{value: 'o', cellNumber:1} as Cell, {value: undefined } as Cell,
+        //{value: 'q'} as Cell,{value: undefined} as Cell, {value: 'q' } as Cell]
     }
 })
 </script>

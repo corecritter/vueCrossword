@@ -1,6 +1,7 @@
 <template>
 <div class="root">
     <div class="panel-area">
+        <label>Show Answers</label>
         <input type="checkbox" v-model="show_answers" @change="show_answers_click"/>
     </div>
     <div class="board-area">
