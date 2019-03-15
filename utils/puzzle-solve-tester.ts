@@ -1,5 +1,5 @@
 import { generate, testHitWord, testWordsIntersect, testWords, makeBoard } from "../src/logic/generate";
-import { Word, Cell } from '@/logic/crossword';
+import { Word, Cell, Board } from '@/logic/crossword';
 
 const answers = [ "cow", "chickens", "hogs" ];
 
@@ -68,32 +68,27 @@ function t_testWords(): boolean {
         startY: 0
     };
 
-    const board1 = makeBoard([w1, w2]);
-    printBoard(board1);
+    //printBoard(makeBoard([w1, w2]));
     if (!testWords([w1, w2])) {
         return false;
     }
 
-    const board2 = makeBoard([w1, w3]);
-    printBoard(board2);
+    //printBoard(makeBoard([w1, w3]));
     if (testWords([w1, w3])) {
         return false;
     }
 
-    const board3 = makeBoard([w1, w3]);
-    printBoard(board3);
+    //printBoard(makeBoard([w1, w3]));
     if (testWords([w1, w3])) {
         return false;
     }
 
-    const board4 = makeBoard([w1, w4]);
-    printBoard(board4);
+    //printBoard(makeBoard([w1, w4]));
     if (testWords([w1, w4])) {
         return false;
     }
 
-    const board5 = makeBoard([w1, w5]);
-    printBoard(board5);
+    //printBoard(makeBoard([w2, w5]));
     if (testWords([w2, w5])) {
         return false;
     }
@@ -175,26 +170,22 @@ function t_testHitWord(): boolean {
     return true;
 }
 
-function printBoard(board: Cell[][]) {
-    let output = "";
-    for (let i = 0; i < board.length; i++) {
-        if (board[i] !== undefined) {
-            for (let j = 0; j < board[i].length; j++) {
-                if (board[i][j] === undefined) {
-                    output += " ";
-                } else {
-                    output += board[i][j].value;
-                }
+function printBoard(board: Board) {
+    const boardExtent = board.GetExtent();
+    let output = "\n";
+    for (let i = boardExtent.y[0]; i <= boardExtent.y[1]; i++) {
+        for (let j = boardExtent.x[0]; j <= boardExtent.x[1]; j++) {
+            const value = board.GetCell(j, i);
+            if (value === undefined) {
                 output += " ";
+            } else {
+                output += value;
             }
+            output += " ";
         }
-        
         output += "\n";
     }
 
     console.log(output);
-    console.log(" ");
-    console.log(" ");
-    console.log(" ");
     console.log(" ");
 }

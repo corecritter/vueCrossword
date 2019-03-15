@@ -103,29 +103,15 @@ function placeWord(placed: ReadonlyArray<Readonly<Word>>, nextWord: string): { w
 }
 
 export function makeBoard(input: ReadonlyArray<Readonly<Word>>): Board {
-    let board: Board = [];
+    let board: Board = new Board();;
     for (let i = 0; i < input.length; i++) {
         let word = input[i];
         let wordLength = word.value.length;
         for (let j = 0; j < wordLength; j++) {
             if (word.direction === "h") {
-                if (!board[word.startX + j]) {
-                    board[word.startX + j] = [];
-                }
-                board[word.startX + j][word.startY] = { 
-                    value: word.value[j],
-                    locationX: word.startX + j,
-                    locationY: word.startY
-                };
+                board.SetCell(word.startX + j, word.startY, word.value[j]);
             } else {
-                if (!board[word.startX]) {
-                    board[word.startX] = [];
-                }
-                board[word.startX][word.startY + j] = { 
-                    value: word.value[j],
-                    locationX: word.startX,
-                    locationY: word.startY + j
-                };
+                board.SetCell(word.startX, word.startY + j, word.value[j]);
             }
         }
     }
