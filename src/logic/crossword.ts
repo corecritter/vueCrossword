@@ -50,6 +50,7 @@ export class Board {
 
 export interface Word {
     value: string;
+    hintNumber: number;
     startX: number;
     startY: number;
     direction: "h" | "v";
