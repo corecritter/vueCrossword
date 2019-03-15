@@ -165,6 +165,22 @@ export function testWords(input: ReadonlyArray<Readonly<Word>>): boolean {
                 if (input[i].direction === input[j].direction) {
                     return false;
                 }
+
+                for (let k = 0; k < input[i].value.length; k++) {
+                    if (input[i].direction === "h") {
+                        const hitTestResult = testHitWord(input[j], input[i].startX + k, input[i].startY);
+                        if (hitTestResult.doesHit && hitTestResult.letter !== input[i].value[k]) {
+                            return false;
+                        }
+                    } else {
+                        const hitTestResult = testHitWord(input[j], input[i].startX, input[i].startY + k);
+                        if (hitTestResult.doesHit && hitTestResult.letter !== input[i].value[k]) {
+                            return false;
+                        }
+                    }
+                    
+                }
+
                 intersectionFound = true;
                 //break;
             }
@@ -267,9 +283,9 @@ export function testWordsIntersect(w1: Readonly<Word>, w2: Readonly<Word>): bool
         for (let i = 0; i < w1.value.length; i++) {
             const hitTest = testHitWord(w2, w1.startX + i, w1.startY);
             if (hitTest.doesHit) {
-                if (hitTest.letter != w1.value[i]) {
-                    return false;
-                }
+                // if (hitTest.letter !== w2.value[i]) {
+                //     return false;
+                // }
                 return true;
             }
         }        

@@ -1,11 +1,6 @@
 import { generate, testHitWord, testWordsIntersect, testWords, makeBoard, placeWord } from "../src/logic/generate";
 import { Word, Cell, Board } from '@/logic/crossword';
 
-//const answers = [ "cow", "chickens", "pigs" ];
-const answers = shuffle([ "cow", "chickens", "donkeys", "horses", "frogs", "pigs", "cats", "dogs", "tractor", "plow" ]);
-
-
-
 if (t_testHitWord()) {
     console.log("testHistWord ... ok");
 } else {
@@ -30,20 +25,25 @@ if (t_placeWord()) {
     console.error("placeWords ... fail");
 }
 
-let count = 0;
-const start = new Date();
-while(count < 1000) {
-    const answers = shuffle([ "cow", "chickens", "donkeys", "horses", "frogs", "pigs", "cats", "dogs", "tractor", "plow" ]);
-    const generateResults = generate(answers);
-    if (generateResults.success) {
-    //    printBoard(makeBoard(generateResults.words));
-    } else {
-        console.error("Could not make board");
-    }
-    count++;
-}
-const end = new Date();
-console.info('Execution time: %dms', end.valueOf() - start.valueOf())
+const answers = ["green","leprechaun","clover","lucky","cabbage","potofgold","magic","celtic","guiness","dublin","scotland","irishcream","shepardspie"];
+const results = generate(answers);
+const board = makeBoard(results.words);
+printBoard(board);
+
+// let count = 0;
+// const start = new Date();
+// while(count < 1000) {
+//     const answers = shuffle([ "cow", "chickens", "donkeys", "horses", "frogs", "pigs", "cats", "dogs", "tractor", "plow" ]);
+//     const generateResults = generate(answers);
+//     if (generateResults.success) {
+//     //    printBoard(makeBoard(generateResults.words));
+//     } else {
+//         console.error("Could not make board");
+//     }
+//     count++;
+// }
+// const end = new Date();
+// console.info('Execution time: %dms', end.valueOf() - start.valueOf())
 
 
 /// Test functions
@@ -185,6 +185,23 @@ function t_testWords(): boolean {
     }
 
 
+    const w16: Word = {
+        value: "lucky",
+        direction: "h",
+        startX: 1,
+        startY: 7
+    };
+    const w17: Word = {
+        value: "potofgold",
+        direction: "v",
+        startX: 4,
+        startY: 3
+    };
+    if (testWords([w16, w17])) {
+        return false;
+    }
+
+
     return true;
 }
 
@@ -254,6 +271,22 @@ function t_testWordsIntersect(): boolean {
         return false;
     }
 
+
+    const w8: Word = {
+        value: "lucky",
+        direction: "h",
+        startX: 1,
+        startY: 7
+    };
+    const w9: Word = {
+        value: "potofgold",
+        direction: "v",
+        startX: 4,
+        startY: 3
+    };
+    if (!testWordsIntersect(w8, w9)) {
+        return false;
+    }
     return true;
 }
 
