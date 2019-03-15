@@ -24,6 +24,7 @@ import VueJsonPretty from 'vue-json-pretty'
 import TestComponent from './TestComponent.vue'
 import { AllInputWords, SetInputWords, SetParsedInputWords } from '../main'
 import { Word } from '../logic/crossword'
+import { generate } from '../logic/generate'
 
 export default Vue.extend({
   components: {
@@ -53,10 +54,12 @@ export default Vue.extend({
   },
   methods: {
     generate_click: function (event: Event) {
+      this.has_error = false
       try {
-        var jString= JSON.stringify(this.jsonDemoString)
-        var jsonObject = JSON.parse(jString)
-        //var jsonObject = JSON.parse(this.input_words)
+        //var jString= JSON.stringify(this.jsonDemoString)
+        //var jsonObject = JSON.parse(jString)
+        var jsonObject = JSON.parse(this.input_words)
+        var words = []
         var parsedWords = new Array() as Array<Word>
         for (let i = 0; i < jsonObject.length; i++) {
           var current = jsonObject[i]
@@ -66,7 +69,17 @@ export default Vue.extend({
           parsedWords.push(word)
         }
         SetParsedInputWords(this.$store, parsedWords)
-        this.$router.push({ path: 'test' })
+        var wordList = parsedWords.map(x => x.value)
+        var result = generate(wordList)
+        if(result.success) {
+          SetParsedInputWords(this.$store, result.words)
+          this.$router.push({ path: 'view' })
+        }
+        else
+        {
+          this.has_error = true
+          this.error_message = "We just couldn't make it work with the words. Try adding more or taking some out"
+        }
       }
       catch {
         this.has_error = true
