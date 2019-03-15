@@ -2,6 +2,7 @@
 <div v-bind:style="grid_style">
     <div class="grid-item" v-for="(cell, index) in board" :key="index">
         <crossword-cell-component
+        :show_answer="show_answer"
         :cell="cell" />
     </div>
 </div>
@@ -18,6 +19,12 @@ import { AllParsedWords } from '../../main'
 export default Vue.extend({
     components: {
         CrosswordCellComponent
+    },
+    props: {
+        show_answer : {
+            type : Boolean,
+            default: true
+        }
     },
     data () {
         return {
@@ -49,8 +56,8 @@ export default Vue.extend({
 
         
         var extent = board.GetExtent()
-        var xRange = extent.x[1] - extent.x[0]
-        var yRange = extent.y[1] - extent.y[0]
+        var xRange = 3///extent.x[1] - extent.x[0]
+        var yRange = 1//extent.y[1] - extent.y[0]
 
         this.grid_style = {
             display: 'grid',
@@ -58,7 +65,8 @@ export default Vue.extend({
             'grid-template-rows': 'repeat(' + yRange + ', auto)'
         }
 
-        this.board = [{value: 'n'} as Cell,{value: 'o'} as Cell]
+        this.board = [{value: 'n'} as Cell,{value: 'o'} as Cell, {value: undefined } as Cell,
+        {value: 'q'} as Cell,{value: undefined} as Cell, {value: 'q' } as Cell]
     }
 })
 </script>
