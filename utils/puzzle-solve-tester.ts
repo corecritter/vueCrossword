@@ -1,4 +1,4 @@
-import { generate, testHitWord, testWordsIntersect, testWords, makeBoard } from "../src/logic/generate";
+import { generate, testHitWord, testWordsIntersect, testWords, makeBoard, placeWord } from "../src/logic/generate";
 import { Word, Cell, Board } from '@/logic/crossword';
 
 const answers = [ "cow", "chickens", "hogs" ];
@@ -23,11 +23,21 @@ if (t_testWords()) {
     console.error("testWords .. fail");
 }
 
-// const words = generate(answers);
+if (t_placeWord()) {
+    console.log("placeWords ... ok");
+} else {
+    console.error("placeWords ... fail");
+}
 
-// words.words.forEach(x => {
-//     console.log(JSON.stringify(x));
-// });
+const generateResults = generate(answers);
+if (generateResults.success) {
+    printBoard(makeBoard(generateResults.words));
+} else {
+    console.error("Could not make board");
+}
+
+
+/// Test functions
 
 function t_testWords(): boolean {
     const w1: Word = {
@@ -167,6 +177,29 @@ function t_testHitWord(): boolean {
     if (!result4.doesHit || result1.letter !== "o") {
         return false;
     }
+    return true;
+}
+
+function t_placeWord(): boolean {
+    const w1: Word = {
+        value: "cow",
+        direction: "h",
+        startX: 0,
+        startY: 0
+    };
+
+    const w2: Word = {
+        value: "chickens",
+        direction: "v",
+        startX: 0,
+        startY: 0
+    };
+
+    const placeResults = placeWord([w1, w2], "pig");
+    if (!placeResults.success) {
+        return false;
+    }
+
     return true;
 }
 
