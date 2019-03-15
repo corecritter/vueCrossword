@@ -1,6 +1,13 @@
 <template>
-    <crossword-grid-component/>
-    <!-- <hint-grid-component /> -->
+<div class="root">
+    <div class="panel-area">
+        <input type="checkbox" v-model="show_answers" @change="show_answers_click"/>
+    </div>
+    <div class="board-area">
+        <crossword-grid-component :show_answer="show_answers"/>
+        <!-- <hint-grid-component /> -->
+    </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -17,6 +24,14 @@ export default Vue.extend({
         HintGridComponent
     },
     data() {
+        return {
+            show_answers: true
+        }
+    },
+    methods: {
+        show_answers_click: function (event: Event) {
+
+        }
     },
     mounted () {
     }
@@ -24,4 +39,13 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.root {
+    display: flex;
+}
+.board-area {
+    flex: 1;
+}
+.panel-area {
+    flex: .2;
+}
 </style>
