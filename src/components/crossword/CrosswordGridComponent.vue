@@ -1,7 +1,8 @@
 <template>
 <div v-bind:style="grid_style">
     <div class="grid-item" v-for="(cell, index) in board" :key="index">
-        <crossword-cell-component />
+        <crossword-cell-component
+        :cell="cell" />
     </div>
 </div>
 </template>
@@ -44,36 +45,23 @@ export default Vue.extend({
         //         var y = word.startY + (i * yFac)
         //         var cell = board.GetCell(x, y)
         //     }
-        // };
+        // }
 
         
         var extent = board.GetExtent()
-        //document.querySelector('.cell-container').style.setProperty('--grid-items', gridItemSetting);
         var xRange = extent.x[1] - extent.x[0]
         var yRange = extent.y[1] - extent.y[0]
 
         this.grid_style = {
             display: 'grid',
-            'grid-template-columns': 'repeat(2, auto)',
-            'grid-template-rows': 'repeat(2, auto)'
+            'grid-template-columns': 'repeat('+ xRange +', auto)',
+            'grid-template-rows': 'repeat(' + yRange + ', auto)'
         }
 
-        this.board = [{},{}]
+        this.board = [{value: 'n'} as Cell,{value: 'o'} as Cell]
     }
 })
 </script>
 
 <style scoped>
-.grid-style {
-    display: grid; 
-    grid-template-columns: repeat(2, auto); 
-    grid-template-rows: repeat(2, auto);
-}
-.grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
-}
 </style>
