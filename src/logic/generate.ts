@@ -388,13 +388,77 @@ export function testHitWord(input: Readonly<Word>, x: number, y: number): { does
 }
 
 function labelWords(input: ReadonlyArray<Readonly<Word>>): Array<Word> {
-    return input.map(x => {
+    const d = input
+    .map(x => {
+        const distance = Math.floor(Math.sqrt(Math.pow(x.startX, 2) + Math.pow(x.startY, 2)))
         return {
-            startX: x.startX,
-            startY: x.startY,
-            value: x.value,
-            direction: x.direction,
-            cellNumber: 1
+            d: x.startX > 0 ? distance : distance * -1,
+            w: x
         };
     })
+    .sort(x => x.d);
+
+    let count = 1;
+    const returnWords = [];
+    let previous: Word | undefined;
+    for (let i = 0; i < d.length; i++) {
+        if (i === 0) {
+            const returnWord: Word = {
+                cellNumber: count,
+                startX: d[i].w.startX,
+                startY: d[i].w.startY,
+                direction: d[i].w.direction,
+                value: d[i].w.value
+            };
+            count++;
+            previous = returnWord;
+            returnWords.push(returnWord);
+            continue;
+        }
+        
+        const word = d[i].w;
+        if (word.startX === d[i - 1].w.startX &&
+            word.startY === d[i - 1].w.startY) {
+                const returnWord: Word = {
+                    cellNumber: previous.cellNumber,
+                    startX: d[i].w.startX,
+                    startY: d[i].w.startY,
+                    direction: d[i].w.direction,
+                    value: d[i].w.value
+                };
+                previous = returnWord;
+                returnWords.push(returnWord);
+        } else {
+            const returnWord: Word = {
+                cellNumber: count,
+                startX: d[i].w.startX,
+                startY: d[i].w.startY,
+                direction: d[i].w.direction,
+                value: d[i].w.value
+            };
+            count++;
+            previous = returnWord;
+            returnWords.push(returnWord);
+        }
+    }
+    return returnWords;
+}
+
+export function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }

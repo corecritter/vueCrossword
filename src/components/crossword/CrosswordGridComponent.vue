@@ -13,7 +13,7 @@ import Vue from 'vue'
 import CrosswordCellComponent from './CrosswordCellComponent.vue'
 import { AllInputWords, SetInputWords } from '../../main'
 import { Word, Cell, Board } from '../../logic/crossword'
-import { makeBoard } from '../../logic/generate'
+import { makeBoard, shuffle } from '../../logic/generate'
 import { AllParsedWords } from '../../main'
 
 export default Vue.extend({
@@ -38,7 +38,7 @@ export default Vue.extend({
     },
     mounted () {
         var parsedWords = AllParsedWords(this.$store)
-        var board = makeBoard(parsedWords) as Board
+        var board = makeBoard(shuffle(parsedWords)) as Board
         var extent = board.GetExtent()
         var xMin = extent.x[0]
         var xMax = extent.x[1]
