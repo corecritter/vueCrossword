@@ -2,7 +2,12 @@ import { Word, Board, Cell } from './crossword';
 
 export function generate(inputs: ReadonlyArray<string>): { words: Array<Word>, success: boolean} {
     const words = inputs.concat([]);
-    return tryPlaceWords([], words);
+    const placeResults = tryPlaceWords([], words);
+    if (placeResults.success) {
+        return { success: true, words: labelWords(placeResults.words) }
+    } else {
+        return { success: false, words: [] };
+    }
 }
 
 function tryPlaceWords(placed: Readonly<Word>[], notPlaced: ReadonlyArray<string>): { words: Readonly<Word>[], success: boolean} {
@@ -136,11 +141,23 @@ export function makeBoard(input: ReadonlyArray<Readonly<Word>>): Board {
         let word = input[i];
         let wordLength = word.value.length;
         for (let j = 0; j < wordLength; j++) {
+            let cell: Cell;
             if (word.direction === "h") {
-                board.SetCell(word.startX + j, word.startY, word.value[j]);
+                cell = {
+                    cellNumber: j == 0 ? word.cellNumber : undefined,
+                    locationX: word.startX + j,
+                    locationY: word.startY,
+                    value: word.value[j]
+                };
             } else {
-                board.SetCell(word.startX, word.startY + j, word.value[j]);
+                cell = {
+                    cellNumber: j == 0 ? word.cellNumber : undefined,
+                    locationX: word.startX,
+                    locationY: word.startY + j,
+                    value: word.value[j]
+                };
             }
+            board.SetCell(cell);
         }
     }
 
@@ -368,4 +385,16 @@ export function testHitWord(input: Readonly<Word>, x: number, y: number): { does
     }
 
     return { doesHit: false, letter: ""};
+}
+
+function labelWords(input: ReadonlyArray<Readonly<Word>>): Array<Word> {
+    return input.map(x => {
+        return {
+            startX: x.startX,
+            startY: x.startY,
+            value: x.value,
+            direction: x.direction,
+            cellNumber: 1
+        };
+    })
 }

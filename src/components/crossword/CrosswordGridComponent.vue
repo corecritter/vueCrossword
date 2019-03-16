@@ -48,17 +48,7 @@ export default Vue.extend({
         var cells = [] as Array<Cell>
         for(let i = extent.y[0]; i <= extent.y[1]; i++) {
             for(let j = extent.x[0]; j <= extent.x[1]; j++) {
-                var cellValue = board.GetCell(j, i)
-
-                if(cellValue) {
-
-                    cellValue = cellValue.toUpperCase()
-                }
-
-                var cell = {
-                    value: cellValue,
-                    cellNumber: undefined
-                } as Cell
+                var cell = board.GetCell(j, i);
 
                 cells.push(cell)
             }

@@ -11,8 +11,8 @@ export class Board {
     private _maxX: number;
     private _maxY: number;
 
-    private readonly _board: string[][] = [];
-    public GetCell(x: number, y: number): string {
+    private readonly _board: Cell[][] = [];
+    public GetCell(x: number, y: number): Cell {
         if (!this._board[x]) {
             this._board[x] = [];
         }
@@ -20,25 +20,25 @@ export class Board {
         return this._board[x][y];
     }
 
-    public SetCell(x: number, y: number, value: string): void {
-        if (!this._board[x]) {
-            this._board[x] = [];
+    public SetCell(value: Cell): void {
+        if (!this._board[value.locationX]) {
+            this._board[value.locationX] = [];
         }
 
-        if (x < this._minX || this._minX === undefined) {
-            this._minX = x;
+        if (value.locationX < this._minX || this._minX === undefined) {
+            this._minX = value.locationX;
         }
-        if (x > this._maxX || this._maxX === undefined) {
-            this._maxX = x;
+        if (value.locationX > this._maxX || this._maxX === undefined) {
+            this._maxX = value.locationX;
         }
-        if (y < this._minY || this._minY === undefined) {
-            this._minY = y;
+        if (value.locationY < this._minY || this._minY === undefined) {
+            this._minY = value.locationY;
         }
-        if (y > this._maxY || this._maxY === undefined) {
-            this._maxY = y;
+        if (value.locationY > this._maxY || this._maxY === undefined) {
+            this._maxY = value.locationY;
         }
 
-        this._board[x][y] = value;
+        this._board[value.locationX][value.locationY] = value;
     }
 
     public GetExtent(): {x: number[], y: number[]}{
