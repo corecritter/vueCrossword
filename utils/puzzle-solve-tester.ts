@@ -2,9 +2,9 @@ import { generate, testHitWord, testWordsIntersect, testWords, makeBoard, placeW
 import { Word, Cell, Board } from '@/logic/crossword';
 
 if (t_testHitWord()) {
-    console.log("testHistWord ... ok");
+    console.log("testHitWord ... ok");
 } else {
-    console.error("testHistWord ... fail");
+    console.error("testHitWord ... fail");
 }
 
 if (t_testWordsIntersect()) {
@@ -47,7 +47,6 @@ printBoard(board);
 
 
 /// Test functions
-
 function t_testWords(): boolean {
     const w1: Word = {
         value: "cow",
@@ -202,6 +201,70 @@ function t_testWords(): boolean {
     }
 
 
+    const w18: Word = {
+        value: "potofgold",
+        direction: "v",
+        startX: -2,
+        startY: -10
+    };
+    const w19: Word = {
+        value: "magic",
+        direction: "h",
+        startX: -1,
+        startY: -4
+    };
+    //printBoard(makeBoard([w18, w19]));
+    if (testWords([w18, w19])) {
+        return false;
+    }
+
+
+    const w20: Word = {
+        direction: "h", 
+        value: "irishcream", 
+        startX: 1, 
+        startY: 2
+    };
+    const w21: Word = {
+        direction: "v", 
+        value: "celtic", 
+        startX: 6, 
+        startY: 3
+    };
+    const w22: Word = {
+        direction: "v", 
+        value: "self", 
+        startX: 4, 
+        startY: 2
+    };
+    const w23: Word = {
+        direction: "h", 
+        value: "fill", 
+        startX: 4, 
+        startY: 5
+    };
+    //printBoard(makeBoard([w20, w21, w22, w23]));
+    if (testWords([w20, w21, w22, w23])) {
+        return false;
+    }
+
+
+    const w24: Word = { direction: "v", value: "celtic", startX: 6, startY: 3 };
+    const w25: Word = { direction: "h", value: "lucky", startX: 1, startY: 7 };
+    const w26: Word = { direction: "h", value: "clover", startX: 2, startY: 4 };
+    const w27: Word = { direction: "v", value: "leprechaun", startX: 2, startY: -1 };
+
+    //printBoard(makeBoard([w24, w25, w26, w27]));
+    if (testWords([w24, w25, w26, w27])) {
+        return false;
+    }
+
+
+
+
+
+
+
     return true;
 }
 
@@ -308,6 +371,7 @@ function t_testHitWord(): boolean {
     const result2 = testHitWord(w1, 7, 2);
     const result3 = testHitWord(w2, 9, 2);
     const result4 = testHitWord(w2, 8, 3);
+    const result5 = testHitWord(w2, 8, 5);
     if (!result1.doesHit || result1.letter !== "o") {
         return false;
     }
@@ -324,6 +388,11 @@ function t_testHitWord(): boolean {
     if (!result4.doesHit || result1.letter !== "o") {
         return false;
     }
+
+    if (result5.doesHit) {
+        return false;
+    }
+
     return true;
 }
 

@@ -182,7 +182,6 @@ export function testWords(input: ReadonlyArray<Readonly<Word>>): boolean {
                 }
 
                 intersectionFound = true;
-                //break;
             }
         }
 
@@ -195,41 +194,87 @@ export function testWords(input: ReadonlyArray<Readonly<Word>>): boolean {
     // another word or be empty
     for (let i = 0; i < input.length; i++) {
         const testWord = input[i];
-        for (let j = 0; j < testWord.value.length; j++) {
+        for (let j = -1; j < testWord.value.length; j++) {
             let p1: {x: number, y: number}, p2: {x:number, y: number};
-            if (testWord.direction === "h") {
-                p1 = {
-                    x: testWord.startX + j,
-                    y: testWord.startY - 1
-                };
-                p2 = {
-                    x: testWord.startX + j,
-                    y: testWord.startY + 1
-                };
+            if (j >= 0) {
+                if (testWord.direction === "h") {
+                    p1 = {
+                        x: testWord.startX + j,
+                        y: testWord.startY - 1
+                    };
+                    p2 = {
+                        x: testWord.startX + j,
+                        y: testWord.startY + 1
+                    };
+                } else {
+                    p1 = {
+                        x: testWord.startX - 1,
+                        y: testWord.startY + j
+                    };
+                    p2 = {
+                        x: testWord.startX + 1,
+                        y: testWord.startY + j
+                    };
+                }
             } else {
-                p1 = {
-                    x: testWord.startX - 1,
-                    y: testWord.startY + j
-                };
-                p2 = {
-                    x: testWord.startX + 1,
-                    y: testWord.startY + j
-                };
+                if (testWord.direction === "h") {
+                    p1 = {
+                        x: testWord.startX - 1,
+                        y: testWord.startY
+                    };
+                    p2 = {
+                        x: testWord.startX + testWord.value.length + 1,
+                        y: testWord.startY
+                    };
+                } else {
+                    p1 = {
+                        x: testWord.startX,
+                        y: testWord.startY - 1
+                    };
+                    p2 = {
+                        x: testWord.startX,
+                        y: testWord.startY + testWord.value.length + 1
+                    };
+                }
             }
 
             for (let k = 0; k < input.length; k++) {
-                if (j === k) {
+                if (i === k) {
                     continue;
                 }
 
                 const p1TestHit = testHitWord(input[k], p1.x, p1.y);
-                if (p1TestHit.doesHit && input[k].direction === testWord.direction) {
-                    return false;
+                if (p1TestHit.doesHit) {
+                    if (input[k].direction === testWord.direction) {
+                        return false;
+                    } else {
+                        if (testWord.direction === "h") {
+                            if (!testHitWord(input[k], testWord.startX + j, testWord.startY).doesHit) {
+                                return false;
+                            }
+                        } else {
+                            if (!testHitWord(input[k], testWord.startX, testWord.startY + j).doesHit) {
+                                return false;
+                            }
+                        }
+                    }
                 }
 
                 const p2TestHit = testHitWord(input[k], p2.x, p2.y);
-                if (p2TestHit.doesHit && input[k].direction === testWord.direction) {
-                    return false;
+                if (p2TestHit.doesHit) { 
+                    if (input[k].direction === testWord.direction) {
+                        return false;
+                    } else {
+                        if (testWord.direction === "h") {
+                            if (!testHitWord(input[k], testWord.startX + j, testWord.startY).doesHit) {
+                                return false;
+                            }
+                        } else {
+                            if (!testHitWord(input[k], testWord.startX, testWord.startY + j).doesHit) {
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -303,22 +348,13 @@ export function testWordsIntersect(w1: Readonly<Word>, w2: Readonly<Word>): bool
     return false;
 }
 
-function testHitWords(input: ReadonlyArray<Readonly<Word>>, x: number, y: number): boolean {
-    for (let i = 0; i < input.length; i++) {
-        if (!testHitWord(input[i], x, y)) {
-            return false;
-        }
-    }
-    return true;
-}
-
 export function testHitWord(input: Readonly<Word>, x: number, y: number): { doesHit: boolean, letter: string} {
     if (input.direction === "h") {
         if (input.startY != y) {
             return { doesHit: false, letter: ""};
         }
 
-        if (input.startX <= x && input.startX + input.value.length >= x) {
+        if (input.startX <= x && input.startX + input.value.length > x) {
             return { doesHit: true, letter: input.value[x - input.startX]};
         }
     } else {
@@ -326,7 +362,7 @@ export function testHitWord(input: Readonly<Word>, x: number, y: number): { does
             return { doesHit: false, letter: ""};
         }
 
-        if (input.startY <= y && input.startY + input.value.length >= y) {
+        if (input.startY <= y && input.startY + input.value.length > y) {
             return { doesHit: true, letter: input.value[y - input.startY]};
         }
     }
