@@ -18,3 +18,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+
+# Api files
+/api/vendor
+/api/api.exe
+/api/api
