@@ -6,7 +6,7 @@ const GetCategoriesRequestName = "get-categories-request"
 const GetCategoriesResponseName = "get-categories-response"
 
 type GetCategoriesRequest struct {
-	ReturnQuestions *bool `json:"return-questions`
+	ReturnQuestions *bool `json:"return-questions"`
 	NumQuestions    *int  `json:"num-questions"`
 }
 

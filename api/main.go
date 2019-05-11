@@ -1,25 +1,15 @@
 package main
 
 import (
-	"errors"
-	"context"
-
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/corecritter/vueCrossword/api/application"
+	"github.com/corecritter/vueCrossword/api/handlers"
+	"github.com/corecritter/vueCrossword/api/serializer"
 )
 
-type HandlerRequest struct {
-	Type string `json:"type"`
-	Data interface{} `json:"data"`
-}
-
 func main() {
-	// engine := new(handlers.Engine)
-	// seializer := new(JsonSerializer)
+	app := new(application.ServerlessApplication)
+	app.Engine = new(handlers.Engine)
+	app.Serializer = new(serializer.JSONSerializer)
 
-	handler := func(ctx context.Context, request events.APIGatewayProxyRequest) (*[]byte, error) {
-		return nil, errors.New("not implemented")
-	}
-
-	lambda.Start(handler)
+	app.Start()
 }
