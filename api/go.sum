@@ -1,0 +1,3 @@
+github.com/aws/aws-lambda-go v1.10.0 h1:uafgdfYGQD0UeT7d2uKdyWW8j/ZYRifRPIdmeqLzLCk=
+github.com/aws/aws-lambda-go v1.10.0/go.mod h1:zUsUQhAUjYzR8AuduJPCfhBuKWUaDbQiPOG+ouzmE1A=
+github.com/corecritter/vueCrossword v0.0.0-20190316030905-55bdf934f715 h1:g17tdR9HbyuZfjYsvUg0W6iKahjnskzpnzMGuCQ35FE=
