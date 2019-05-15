@@ -3,6 +3,7 @@ import App from './App.vue'
 import { getStoreAccessors } from 'vuex-typescript'
 import * as Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import MainComponent from './components/main/MainComponent.vue'
 import WordInputComponent from './components/WordInputComponent.vue'
 import TestComponent from './components/TestComponent.vue'
 import CrosswordViewComponent from './components/CrosswordViewComponent.vue'
@@ -73,7 +74,8 @@ export const store = new Vuex.Store<RootState>({
 })
 
 const routes = [
-  { path: '/', component: WordInputComponent },
+  { path: '/', component:MainComponent },
+  { path: '/input', component: WordInputComponent },
   { path: '/view', component: CrosswordViewComponent },
   { path: '/test', component: TestComponent }
 ]

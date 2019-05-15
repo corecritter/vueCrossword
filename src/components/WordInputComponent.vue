@@ -1,19 +1,36 @@
 <template>
   <div class="root">
-    <p>
-      Enter your crossword input in JSON format like this:
-    </p>
-    <div class="json-pretty">
-      <vue-json-pretty
-        :data="jsonDemoString">
-      </vue-json-pretty>
-    </div>
-    <input v-model="input_words" placeholder="enter the words"/>
-    <br>
-    <button v-on:click="generate_click">Generate!</button>
-    <br>
-    <div v-show="has_error" class="error-message">
-      {{ error_message }}
+    <div class="main-content-area">
+      <div class="content-section">
+        <div class="content-area">
+          <div class="content-section">
+            
+            <select v-model="selected_category">
+              <option disabled value="">Select a category</option>
+              <option v-for="(cell, index) in categories" :key="index">
+                {{cell}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="content-section">
+        <p>
+          Enter your crossword input in JSON format like this:
+        </p>
+        <div class="json-pretty">
+          <vue-json-pretty
+            :data="jsonDemoString">
+          </vue-json-pretty>
+        </div>
+        <input v-model="input_words" placeholder="enter the words"/>
+        <br>
+        <button v-on:click="generate_click">Generate!</button>
+        <br>
+        <div v-show="has_error" class="error-message">
+          {{ error_message }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,16 +50,27 @@ export default Vue.extend({
   },
   data () {
     return {
+      categories: [],
       jsonDemoString: [
           { word: 'Working', hint: 'You are probably not doing this right now' },
           { word: 'Daydream', hint: 'You are probably doing this right now' }
       ],
       json_error: false,
       has_error: false,
-      error_message: ""
+      error_message: "",
+      selectedCategory: ""
     }
   },
   computed: {
+    selected_category: {
+      get () : string {
+        return this.selectedCategory
+      },
+      set (value: string) {
+        this.selectedCategory = value
+        
+      }
+    },
     input_words: {
       get () : string {
         return AllInputWords(this.$store)
@@ -88,6 +116,9 @@ export default Vue.extend({
     },      
   },
   mounted () {
+    //get categories
+    var categories = ['Animals', 'Cars']
+    this.categories = categories 
   }
 })
 </script>
@@ -99,6 +130,17 @@ export default Vue.extend({
   width: 60%;
   border: 1px solid rgb(5, 179, 34);
   padding: 10px;
+}
+.main-content-area {
+  display: flex;
+  flex-direction: column;
+}
+.content-area {
+  display: flex;
+}
+.content-section {
+  flex: .1;
+  align-items: flex-start
 }
 .json-pretty {
   text-align: left;
