@@ -15,7 +15,9 @@ Vue.use(Vuex)
 Vue.config.productionTip = false
 interface InputState {
   InputWords?: string,
-  ParsedInputWords?: Array<Word>
+  ParsedInputWords?: Array<Word>,
+  Category? : string,
+  BoardSize? : string
 }
 
 interface RootState {
@@ -28,7 +30,9 @@ const data = {
   namespaced: true,
   state: {
     InputWords: '[{"word":"green","hint":""},{"word":"leprechaun","hint":""},{"word":"clover","hint":""},{"word":"lucky","hint":""},{"word":"cabbage","hint":""},{"word":"potofgold","hint":""},{"word":"magic","hint":""},{"word":"celtic","hint":""},{"word":"guiness","hint":""},{"word":"dublin","hint":""},{"word":"scotland","hint":""},{"word":"irishcream","hint":""},{"word":"shepardspie","hint":""}]',
-    ParsedInputWords : []
+    ParsedInputWords : [],
+    Category: "",
+    BoardSize: "",
   },
   getters: {
     GetInputWords (state: InputState) : string {
@@ -36,6 +40,12 @@ const data = {
     },
     GetParsedInputWords (state: InputState) : Array<Word> {
       return state.ParsedInputWords
+    },
+    GetCategory (state: InputState) : string {
+      return state.Category
+    },
+    GetBoardSize (state: InputState) : string {
+      return state.BoardSize
     }
   },
   mutations: {
@@ -45,6 +55,12 @@ const data = {
     },
     setParsedInputWords(state: InputState, newValue: Array<Word>) {
       state.ParsedInputWords = newValue
+    },
+    setCategory (state: InputState, newValue: string) {
+      state.Category = newValue
+    },
+    setBoardSize (state: InputState, newValue: string) {
+      state.BoardSize = newValue
     }
   },
   actions: {
@@ -60,9 +76,13 @@ const getters = data.getters
 
 export const AllInputWords = read(getters.GetInputWords)
 export const AllParsedWords = read(getters.GetParsedInputWords)
+export const Category = read(getters.GetBoardSize)
+export const BoardSize = read(getters.GetBoardSize)
 
 export const SetInputWords = commit(data.mutations.setInputWords)
 export const SetParsedInputWords = commit(data.mutations.setParsedInputWords)
+export const SetCategory = commit(data.mutations.setCategory)
+export const SetBoardSize = commit(data.mutations.setBoardSize)
 
 export const store = new Vuex.Store<RootState>({
   state: {

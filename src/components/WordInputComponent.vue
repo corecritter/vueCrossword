@@ -1,56 +1,62 @@
 <template>
-  <div class="root">
-    <div class="main-content-area">
-      <div class="content-section">
-        <div class="content-area">
-          <div class="content-section">
-            
-            <select v-model="selected_category">
-              <option disabled value="">Select a category</option>
-              <option v-for="(cell, index) in categories" :key="index">
-                {{cell}}
-              </option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="content-section">
-        <p>
-          Enter your crossword input in JSON format like this:
-        </p>
-        <div class="json-pretty">
-          <vue-json-pretty
-            :data="jsonDemoString">
-          </vue-json-pretty>
-        </div>
-        <input v-model="input_words" placeholder="enter the words"/>
-        <br>
-        <button v-on:click="generate_click">Generate!</button>
-        <br>
-        <div v-show="has_error" class="error-message">
-          {{ error_message }}
-        </div>
-      </div>
+  <div v-if="isLoading">Loading...</div>
+  <div v-else class="root">
+    <div class="content-section">
+      <select class="content-section" v-model="selected_category" >
+        <option selected disabled value="">Select category</option>
+        <option v-for="(category, index) in categories" :key="index">
+          {{category}}
+        </option>
+      </select>
+      <div class="filler"/>
+      <select class="content-section" v-model="selected_board_size">
+        <option selected disabled value="">Select size</option>
+        <option v-for="(size, index) in boardSizes" :key="index">
+          {{size}}
+        </option>
+      </select>
     </div>
+    <br />
+    <div class="content-section">
+      <div class="filler"/>
+      <button class="button" v-on:click="create_click" :disabled="createDisabled">Create</button>
+      <div class="filler"/>
+    </div>
+    <!-- <div class="content-section">
+      <p>
+        Enter your crossword input in JSON format like this:
+      </p>
+      <div class="json-pretty">
+        <vue-json-pretty
+          :data="jsonDemoString">
+        </vue-json-pretty>
+      </div>
+      <input v-model="input_words" placeholder="enter the words"/>
+      <br>
+      <button v-on:click="generate_click">Generate!</button>
+      <br>
+      <div v-show="has_error" class="error-message">
+        {{ error_message }}
+      </div>
+    </div> -->
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import VueJsonPretty from 'vue-json-pretty'
-import TestComponent from './TestComponent.vue'
-import { AllInputWords, SetInputWords, SetParsedInputWords } from '../main'
+import { AllInputWords, SetInputWords, SetParsedInputWords, SetCategory, SetBoardSize } from '../main'
 import { Word } from '../logic/crossword'
 import { generate } from '../logic/generate'
 
 export default Vue.extend({
   components: {
-    TestComponent,
     VueJsonPretty
   },
   data () {
     return {
       categories: [],
+      boardSizes: ['Small', 'Medium', 'Large'],
       jsonDemoString: [
           { word: 'Working', hint: 'You are probably not doing this right now' },
           { word: 'Daydream', hint: 'You are probably doing this right now' }
@@ -58,7 +64,10 @@ export default Vue.extend({
       json_error: false,
       has_error: false,
       error_message: "",
-      selectedCategory: ""
+      selectedCategory: "",
+      selectedBoardSize: "",
+      createDisabled: true,
+      isLoading: true
     }
   },
   computed: {
@@ -68,7 +77,16 @@ export default Vue.extend({
       },
       set (value: string) {
         this.selectedCategory = value
-        
+        this.setCreateDisabled()
+      }
+    },
+    selected_board_size: {
+      get () : string {
+        return this.selectedBoardSize
+      },
+      set (value: string) {
+        this.selectedBoardSize = value
+        this.setCreateDisabled()
       }
     },
     input_words: {
@@ -81,6 +99,13 @@ export default Vue.extend({
     }
   },
   methods: {
+    setCreateDisabled: function () {
+      this.createDisabled = this.selectedCategory == "" || this.selectedBoardSize == ""
+    },
+    create_click: function (event: Event) {
+      SetCategory(this.$store, this.selected_category)
+      SetBoardSize(this.$store, this.selected_board_size)
+    },
     generate_click: function (event: Event) {
       this.has_error = false
       try {
@@ -116,9 +141,12 @@ export default Vue.extend({
     },      
   },
   mounted () {
-    //get categories
-    var categories = ['Animals', 'Cars']
-    this.categories = categories 
+    const self = this;
+    setTimeout(function () {
+       var categories = ['Animals', 'Cars']
+       self.categories = categories
+       self.isLoading = false 
+    }, 3000)
   }
 })
 </script>
@@ -130,17 +158,40 @@ export default Vue.extend({
   width: 60%;
   border: 1px solid rgb(5, 179, 34);
   padding: 10px;
-}
-.main-content-area {
   display: flex;
   flex-direction: column;
 }
-.content-area {
-  display: flex;
-}
 .content-section {
-  flex: .1;
-  align-items: flex-start
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+.button {
+  flex:1;
+  align-self: center;
+  background-color: rgb(77, 202, 27);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.button:disabled {
+  flex:1; 
+  align-self: center;
+  background-color: gray;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.filler {
+  flex: .5;
 }
 .json-pretty {
   text-align: left;
